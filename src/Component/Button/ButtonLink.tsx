@@ -1,6 +1,8 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
+
 import {TypeButton} from './TypeButton';
+import {COLORS, FONTS} from '../../Constant';
 
 const ButtonLink: React.FC<TypeButton> = ({
   onPress,
@@ -19,6 +21,7 @@ export default ButtonLink;
 
 const styles = StyleSheet.create({
   textLink: {
-    color: 'black',
+    color: COLORS.SOFT_PINK,
+    fontFamily: FONTS.MITR_LIGHT,
   },
 });

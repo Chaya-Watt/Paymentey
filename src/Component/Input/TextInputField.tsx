@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, View, StyleSheet, TextInput} from 'react-native';
+import {FONTS} from '../../Constant';
 
 import {TypeTextInputField} from './TypeInput';
 
@@ -31,6 +32,7 @@ const styles = ({mt, mb}: {mt?: number; mb?: number}) =>
       fontSize: 14,
       color: 'black',
       marginBottom: 8,
+      fontFamily: FONTS.MITR_REGULAR,
     },
 
     input: {
@@ -43,5 +45,7 @@ const styles = ({mt, mb}: {mt?: number; mb?: number}) =>
       borderRadius: 10,
       borderColor: 'black',
       borderWidth: 1,
+
+      fontFamily: FONTS.MITR_LIGHT,
     },
   });

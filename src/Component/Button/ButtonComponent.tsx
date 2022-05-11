@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {COLORS, FONTS} from '../../Constant';
 import {TypeButton} from './TypeButton';
 
 const ButtonComponent: React.FC<TypeButton> = ({
@@ -11,7 +12,7 @@ const ButtonComponent: React.FC<TypeButton> = ({
     <TouchableOpacity
       style={[styles.containerButton, customStyleContainer]}
       onPress={onPress}>
-      <Text>{title}</Text>
+      <Text style={styles.textButton}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -24,9 +25,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 15,
 
-    borderWidth: 1,
     borderRadius: 10,
-
     width: '100%',
+
+    backgroundColor: COLORS.SOFT_RED,
+  },
+
+  textButton: {
+    color: COLORS.WHITE,
+    fontSize: 16,
+    fontFamily: FONTS.MITR_MEDIUM,
   },
 });
