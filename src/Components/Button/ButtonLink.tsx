@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 
 import {TypeButton} from './TypeButton';
-import {COLORS, FONTS} from '../../Constant';
+import {COLORS, FONTS} from '@Constants';
 
 const ButtonLink: React.FC<TypeButton> = ({
   onPress,

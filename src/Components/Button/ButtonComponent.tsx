@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
-import {COLORS, FONTS} from '../../Constant';
+import {COLORS, FONTS} from '@Constants';
 import {TypeButton} from './TypeButton';
 
 const ButtonComponent: React.FC<TypeButton> = ({
