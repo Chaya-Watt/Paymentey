@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, View, StyleSheet, TextInput} from 'react-native';
-import {FONTS} from '../../Constant';
+import {FONTS} from '@Constants';
 
 import {TypeTextInputField} from './TypeInput';
 

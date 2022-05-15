@@ -4,9 +4,9 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-import {RootStackParams} from '../../Routers/typeRouters';
-import {TextInputField, ButtonComponent} from '../../Component';
-import {COLORS, FONTS} from '../../Constant';
+import {RootStackParams} from '@Routers/typeRouters';
+import {TextInputField, ButtonComponent} from '@Components';
+import {COLORS, FONTS} from '@Constants';
 
 const height = Dimensions.get('window').height;
 const headerHeight = height / 3.5;

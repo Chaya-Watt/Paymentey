@@ -1,6 +1,6 @@
 import service from '../service';
 import ENDPOINT from '../endpoint';
-import {LoginRequestDataType, RegisterRequestDataType} from '../../../Type';
+import {LoginRequestDataType, RegisterRequestDataType} from '@Types';
 
 export const login = async (payload: LoginRequestDataType) => {
   const url = ENDPOINT.AUTH.LOGIN;
