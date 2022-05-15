@@ -3,10 +3,19 @@ export interface LoginRequestDataType {
   password: string;
 }
 
+export interface LoginResponseDataType {
+  response: object;
+  token: string;
+}
+
 export interface RegisterRequestDataType {
   email: string;
   password: string;
   confirmPassword: string;
-  firstName: string;
-  lastName: string;
+  username: string;
+}
+
+export interface RegisterResponseDataType {
+  response: object;
+  token: string;
 }

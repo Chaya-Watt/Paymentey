@@ -1,12 +1,20 @@
 import React, {useState} from 'react';
-import {Text, View, Dimensions, StyleSheet, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  Dimensions,
+  StyleSheet,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {RootStackParams} from '@Routers/typeRouters';
 import {TextInputField, ButtonComponent, ButtonLink} from '@Components';
-import {COLORS, FONTS} from '@Constants';
+import {COLORS, FONTS, KEY_LOCAL_STORAGE} from '@Constants';
+import {login, storeData} from '@Helpers';
 
 const height = Dimensions.get('window').height;
 const headerHeight = height / 3.5;
@@ -25,8 +33,20 @@ const Login = () => {
     setValueForm({...valueForm, [name]: text});
   };
 
-  const onPressLogin = () => {
-    navigation.navigate('TabStack', {screen: 'HomeStack'});
+  const onPressLogin = async () => {
+    const {email, password} = valueForm;
+
+    try {
+      const response = await login({
+        email,
+        password,
+      });
+
+      await storeData(KEY_LOCAL_STORAGE.TOKEN, response.data.token);
+      navigation.navigate('TabStack', {screen: 'HomeStack'});
+    } catch (error: any) {
+      Alert.alert(error.response.data.message);
+    }
   };
 
   const onPressForgotPassword = () => {

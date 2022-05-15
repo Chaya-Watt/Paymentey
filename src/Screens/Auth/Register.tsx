@@ -1,12 +1,20 @@
 import React, {useState} from 'react';
-import {Text, View, Dimensions, StyleSheet, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  Dimensions,
+  StyleSheet,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 import {RootStackParams} from '@Routers/typeRouters';
 import {TextInputField, ButtonComponent} from '@Components';
-import {COLORS, FONTS} from '@Constants';
+import {COLORS, FONTS, KEY_LOCAL_STORAGE} from '@Constants';
+import {signup, storeData} from '@Helpers';
 
 const height = Dimensions.get('window').height;
 const headerHeight = height / 3.5;
@@ -20,20 +28,34 @@ const Register = () => {
     email: string;
     password: string;
     confirmPassword: string;
-    name: string;
+    username: string;
   }>({
     email: '',
     password: '',
     confirmPassword: '',
-    name: '',
+    username: '',
   });
 
   const handleChangeValue = (text: string, name: string) => {
     setValueForm({...valueForm, [name]: text});
   };
 
-  const onPressCreateAccount = () => {
-    navigation.navigate('TabStack', {screen: 'HomeStack'});
+  const onPressCreateAccount = async () => {
+    const {email, password, confirmPassword, username} = valueForm;
+
+    try {
+      const response = await signup({
+        email,
+        password,
+        confirmPassword,
+        username,
+      });
+
+      await storeData(KEY_LOCAL_STORAGE.TOKEN, response.data.token);
+      navigation.navigate('TabStack', {screen: 'HomeStack'});
+    } catch (error: any) {
+      Alert.alert(error.response.data.message);
+    }
   };
 
   return (
@@ -69,10 +91,10 @@ const Register = () => {
           />
           <TextInputField
             label="Name"
-            value={valueForm.name}
+            value={valueForm.username}
             placeholder="กรุณากรอกชื่อ"
             customStyle={styles.marginInput}
-            onChangeText={text => handleChangeValue(text, 'name')}
+            onChangeText={text => handleChangeValue(text, 'username')}
           />
           <ButtonComponent
             title="Create Account"

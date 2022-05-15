@@ -8,25 +8,15 @@ const service = async <T, D>({
   url,
   headers,
   data,
-}: AxiosRequestConfig<D>): Promise<
-  AxiosResponse<T | unknown, D> | undefined
-> => {
-  try {
-    const response = await axios({
-      method,
-      url,
-      headers,
-      data,
-    });
+}: AxiosRequestConfig<D>): Promise<AxiosResponse<T, D>> => {
+  const response = await axios({
+    method,
+    url,
+    headers,
+    data,
+  });
 
-    return response;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      return error.response;
-    } else {
-      return error as undefined;
-    }
-  }
+  return response;
 };
 
 export default service;
