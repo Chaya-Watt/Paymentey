@@ -1,7 +1,7 @@
 const ENDPOINT = {
   AUTH: {
     LOGIN: '/users/login',
-    REGISTER: '/users/singup',
+    REGISTER: '/users/signup',
   },
 };
 
