@@ -1,8 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet, TextInput} from 'react-native';
 import {FONTS} from '@Constants';
-
-import {TypeTextInputField} from './TypeInput';
+import {TypeTextInputField} from '@Types';
 
 const TextInputField: React.FC<TypeTextInputField> = ({
   label,

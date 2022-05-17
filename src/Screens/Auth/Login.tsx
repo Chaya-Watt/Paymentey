@@ -7,11 +7,11 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-import {RootStackParams} from '@Routers/typeRouters';
+import {RootStackParams} from '@Types';
 import {TextInputField, ButtonComponent, ButtonLink} from '@Components';
 import {COLORS, FONTS, KEY_LOCAL_STORAGE} from '@Constants';
 import {login, storeData} from '@Helpers';
@@ -43,7 +43,15 @@ const Login = () => {
       });
 
       await storeData(KEY_LOCAL_STORAGE.TOKEN, response.data.token);
-      navigation.navigate('TabStack', {screen: 'HomeStack'});
+
+      navigation.navigate('TabStack', {
+        screen: 'HomeStack',
+        params: {screen: 'Home'},
+      });
+
+      navigation.dispatch(
+        CommonActions.reset({index: 1, routes: [{name: 'TabStack'}]}),
+      );
     } catch (error: any) {
       Alert.alert(error.response.data.message);
     }

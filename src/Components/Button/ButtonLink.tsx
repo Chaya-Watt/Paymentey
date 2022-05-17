@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 
-import {TypeButton} from './TypeButton';
 import {COLORS, FONTS} from '@Constants';
+import {TypeButtonLink} from '@Types';
 
-const ButtonLink: React.FC<TypeButton> = ({
+const ButtonLink: React.FC<TypeButtonLink> = ({
   onPress,
   title,
   customStyleContainer,

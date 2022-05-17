@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {COLORS, FONTS} from '@Constants';
-import {TypeButton} from './TypeButton';
+import {TypeButton} from '@Types';
 
 const ButtonComponent: React.FC<TypeButton> = ({
   onPress,

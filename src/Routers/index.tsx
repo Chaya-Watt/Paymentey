@@ -5,7 +5,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import AuthStackRoute from './AuthStackRoute';
 import TabStackRoute from './TabStackRoute';
-import {RootStackParams} from './typeRouters';
+import {RootStackParams} from '@Types';
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
 
