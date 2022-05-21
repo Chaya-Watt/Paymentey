@@ -4,6 +4,7 @@ const COLORS = {
   SOFT_PINK: '#FFBCBC',
   SOFT_RED: '#F38BA0',
   WHITE: '#FFFFFF',
+  BLACK: '#000000',
 };
 
 export default COLORS;

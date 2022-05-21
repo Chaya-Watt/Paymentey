@@ -1,9 +1,9 @@
 import React from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
 
-import {HeaderBar} from '@Components';
+import {HeaderBar, Wallet} from '@Components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS} from '@Constants';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
 
 const Home = () => {
   return (
@@ -14,21 +14,26 @@ const Home = () => {
         description="วันนี้กินให้น้อยๆ"
         imageProfile="https://reactnative.dev/img/tiny_logo.png"
       />
-      {/* <SafeAreaView
-        edges={['right', 'bottom', 'left']}
-        style={styles.containerContent}>
+
+      <View style={styles.containerContent}>
+        <View style={styles.positionWallet}>
+          <Wallet />
+        </View>
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
-          style={{padding: 5}}>
+          // refreshControl={
+          //   <RefreshControl refreshing={true} onRefresh={() => null} />
+          // }
+          style={styles.containerScrollView}>
           <View
             style={{
-              width: '100%',
-              minHeight: 150,
+              height: 150,
               backgroundColor: 'white',
-              padding: 10,
-              borderRadius: 10,
+              margin: 1,
+              marginBottom: 20,
 
+              borderRadius: 15,
               shadowColor: '#000',
               shadowOffset: {
                 width: 0,
@@ -38,11 +43,29 @@ const Home = () => {
               shadowRadius: 1.41,
 
               elevation: 2,
-            }}>
-            <Text>Wallet :</Text>
-          </View>
+            }}
+          />
+          <View
+            style={{
+              height: 150,
+              backgroundColor: 'white',
+              margin: 1,
+              marginBottom: 20,
+
+              borderRadius: 15,
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 1,
+              },
+              shadowOpacity: 0.2,
+              shadowRadius: 1.41,
+
+              elevation: 2,
+            }}
+          />
         </ScrollView>
-      </SafeAreaView> */}
+      </View>
     </>
   );
 };
@@ -57,7 +80,27 @@ const styles = StyleSheet.create({
 
   containerContent: {
     flex: 1,
+    width: '100%',
+    marginTop: -50,
+    alignItems: 'center',
+    marginBottom: 80,
+
     backgroundColor: COLORS.WHITE,
-    padding: 15,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+    paddingHorizontal: 15,
+  },
+
+  positionWallet: {
+    width: '80%',
+    alignItems: 'center',
+    marginTop: -50,
+  },
+
+  containerScrollView: {
+    width: '100%',
+    paddingBottom: 10,
+    marginTop: 20,
+    padding: 1,
   },
 });

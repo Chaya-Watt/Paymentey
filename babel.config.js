@@ -13,6 +13,7 @@ module.exports = {
           '@Routers': './src/Routers',
           '@Screens': './src/Screens',
           '@Types': './src/Types',
+          '@Icons': './src/Icons',
         },
       },
     ],
