@@ -1,11 +1,16 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
-import {HeaderBar, Wallet} from '@Components';
+import {HeaderBar, Wallet, MenuCard} from '@Components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS} from '@Constants';
 
 const Home = () => {
+  const menuList = [
+    {menuTitle: 'To Day Transaction', data: {income: 100, expense: 300}},
+    {menuTitle: 'Month Transaction', data: {income: 10000, expense: 5000}},
+  ];
+
   return (
     <>
       <SafeAreaView edges={['top']} style={styles.safeAreaViewTop} />
@@ -26,44 +31,13 @@ const Home = () => {
           //   <RefreshControl refreshing={true} onRefresh={() => null} />
           // }
           style={styles.containerScrollView}>
-          <View
-            style={{
-              height: 150,
-              backgroundColor: 'white',
-              margin: 1,
-              marginBottom: 20,
-
-              borderRadius: 15,
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 1,
-              },
-              shadowOpacity: 0.2,
-              shadowRadius: 1.41,
-
-              elevation: 2,
-            }}
-          />
-          <View
-            style={{
-              height: 150,
-              backgroundColor: 'white',
-              margin: 1,
-              marginBottom: 20,
-
-              borderRadius: 15,
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 1,
-              },
-              shadowOpacity: 0.2,
-              shadowRadius: 1.41,
-
-              elevation: 2,
-            }}
-          />
+          {menuList.map((menu, index) => (
+            <MenuCard
+              key={index}
+              menuTitle={menu.menuTitle}
+              dataTransaction={menu.data}
+            />
+          ))}
         </ScrollView>
       </View>
     </>

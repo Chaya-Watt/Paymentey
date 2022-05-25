@@ -72,19 +72,20 @@ const styles = StyleSheet.create({
   },
 
   textName: {
-    color: COLORS.SOFT_RED,
+    color: COLORS.PINK,
     fontFamily: FONTS.MITR_MEDIUM,
     fontSize: 24,
   },
 
   headerStatus: {
-    color: COLORS.SOFT_PINK,
+    color: COLORS.PINK,
     fontFamily: FONTS.MITR_REGULAR,
     fontSize: 18,
+    opacity: 0.8,
   },
 
   textStatus: {
-    color: COLORS.SOFT_PINK,
+    color: COLORS.PINK,
     fontFamily: FONTS.MITR_LIGHT,
     fontSize: 18,
   },

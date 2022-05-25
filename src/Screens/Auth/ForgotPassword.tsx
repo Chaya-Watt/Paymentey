@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   textApp: {
     fontSize: 30,
     marginBottom: 20,
-    color: COLORS.SOFT_RED,
+    color: COLORS.PINK,
     fontFamily: FONTS.MITR_SEMI_BOLD,
   },
 

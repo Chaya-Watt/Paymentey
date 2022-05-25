@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '100%',
 
-    backgroundColor: COLORS.SOFT_RED,
+    backgroundColor: COLORS.PINK,
   },
 
   textButton: {

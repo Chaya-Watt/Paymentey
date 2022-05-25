@@ -39,8 +39,7 @@ const styles = StyleSheet.create({
 
   titleBalance: {
     fontFamily: FONTS.MITR_MEDIUM,
-    opacity: 0.2,
-    color: COLORS.BLACK,
+    color: COLORS.GRAY,
   },
 
   amount: {
