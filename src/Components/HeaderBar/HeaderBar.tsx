@@ -1,44 +1,30 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
+
 import {COLORS, FONTS} from '@Constants';
 import {TypeHeaderBar} from '@Types';
-import menuIcon from '@Icons/menu-icon.png';
-
-const height = Dimensions.get('window').height;
-const headerHeight = height / 3;
+import {formatCurrency} from '@Helpers';
 
 const HeaderBar: React.FC<TypeHeaderBar> = ({
-  imageProfile,
-  name,
+  icon,
+  headerTitle,
+  title,
+  headerDescription,
   description,
 }) => {
   return (
     <View style={styles.containerHeaderBar}>
-      <View style={styles.positionIcon}>
-        <TouchableOpacity>
-          <Image source={menuIcon} style={styles.icon} />
-        </TouchableOpacity>
-      </View>
+      <Image source={icon} style={styles.icon} />
       <View style={styles.containerContent}>
-        <View>
-          <Text numberOfLines={1} style={styles.textName}>
-            {name}
-          </Text>
-          <Text style={styles.headerStatus}>
-            Status :{' '}
-            <Text numberOfLines={1} style={styles.textStatus}>
-              {description}
-            </Text>
-          </Text>
-        </View>
-        <Image style={styles.imageProfile} source={{uri: imageProfile}} />
+        <Text style={styles.headerTitle} numberOfLines={1}>
+          {headerTitle} :<Text style={styles.title}> {title}</Text>
+        </Text>
+        <Text style={styles.headerDescription}>
+          {headerDescription} :{' '}
+          {typeof description === 'number'
+            ? formatCurrency(description)
+            : description}
+        </Text>
       </View>
     </View>
   );
@@ -48,52 +34,39 @@ export default HeaderBar;
 
 const styles = StyleSheet.create({
   containerHeaderBar: {
-    height: headerHeight,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
     width: '100%',
-    padding: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     backgroundColor: COLORS.SOFT_BLUE,
   },
 
-  positionIcon: {
-    alignSelf: 'flex-end',
-  },
-
   icon: {
-    width: 20,
-    height: 20,
-    opacity: 0.7,
+    width: 40,
+    height: 40,
   },
 
   containerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 30,
+    flex: 1,
+    marginLeft: 10,
   },
 
-  textName: {
-    color: COLORS.PINK,
+  headerTitle: {
     fontFamily: FONTS.MITR_MEDIUM,
-    fontSize: 24,
+    fontSize: 16,
+    color: COLORS.PINK,
+    marginBottom: 5,
   },
 
-  headerStatus: {
-    color: COLORS.PINK,
+  title: {
+    fontSize: 14,
+  },
+
+  headerDescription: {
     fontFamily: FONTS.MITR_REGULAR,
-    fontSize: 18,
-    opacity: 0.8,
-  },
-
-  textStatus: {
-    color: COLORS.PINK,
-    fontFamily: FONTS.MITR_LIGHT,
-    fontSize: 18,
-  },
-
-  imageProfile: {
-    width: 60,
-    height: 60,
-    backgroundColor: COLORS.SOFT_PINK,
-    borderRadius: 50,
+    fontSize: 12,
+    color: COLORS.DARK_GRAY,
   },
 });

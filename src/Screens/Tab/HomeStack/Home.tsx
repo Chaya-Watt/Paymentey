@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
-import {HeaderBar, Wallet, MenuCard} from '@Components';
+import {HeaderBarHome, Wallet, MenuCard} from '@Components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS} from '@Constants';
 
@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <>
       <SafeAreaView edges={['top']} style={styles.safeAreaViewTop} />
-      <HeaderBar
+      <HeaderBarHome
         name="Chayanant Watt"
         description="วันนี้กินให้น้อยๆ"
         imageProfile="https://reactnative.dev/img/tiny_logo.png"

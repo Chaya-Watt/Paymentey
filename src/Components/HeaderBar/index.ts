@@ -1,3 +1,4 @@
+import HeaderBarHome from './HeaderBarHome';
 import HeaderBar from './HeaderBar';
 
-export {HeaderBar};
+export {HeaderBarHome, HeaderBar};

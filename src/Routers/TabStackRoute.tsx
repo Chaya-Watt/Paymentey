@@ -1,10 +1,11 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Image, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {Image, Text, TouchableOpacity, StyleSheet, LogBox} from 'react-native';
 
 import {TabStackParams} from '@Types';
 import {COLORS, FONTS} from '@Constants';
 import HomeStackRoute from './HomeStackRoute';
+import {CreateTransaction} from '@Screens';
 
 import homeIcon from '@Icons/home-icon.png';
 import homeActiveIcon from '@Icons/home-active-icon.png';
@@ -14,6 +15,9 @@ import settingIcon from '@Icons/setting-icon.png';
 import settingActiveIcon from '@Icons/setting-active-icon.png';
 
 const TabStack = createBottomTabNavigator<TabStackParams>();
+
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
 
 const TabStackRoute = () => {
   return (
@@ -38,7 +42,7 @@ const TabStackRoute = () => {
       />
       <TabStack.Screen
         name="CreateTransaction"
-        component={() => null}
+        component={CreateTransaction}
         options={{
           tabBarButton: props => (
             <TabButtonCustom
@@ -85,7 +89,7 @@ const TabButtonCustom = ({
         source={focused ? iconActive : icon}
         style={[styles({}).iconTabBar, focused && styles({}).activeIcon]}
       />
-      <Text style={styles({focused}).textButton}>{title}</Text>
+      {focused && <Text style={styles({focused}).textButton}>{title}</Text>}
     </TouchableOpacity>
   );
 };
