@@ -37,13 +37,12 @@ const Login = () => {
     const {email, password} = valueForm;
 
     try {
-      // const response = await login({
-      //   email,
-      //   password,
-      // });
+      const response = await login({
+        email,
+        password,
+      });
 
-      // await storeData(KEY_LOCAL_STORAGE.TOKEN, response.data.token);
-
+      await storeData(KEY_LOCAL_STORAGE.TOKEN, response.data.token);
       navigation.navigate('TabStack', {
         screen: 'HomeStack',
         params: {screen: 'Home'},

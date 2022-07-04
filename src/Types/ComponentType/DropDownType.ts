@@ -2,13 +2,15 @@ import {ImageSourcePropType} from 'react-native';
 
 export interface TypeDropDownProps {
   icon: ImageSourcePropType;
+  label?: string;
   listSelect: TypeListOfDropDown[];
   onPress: () => void;
   placeholder: string;
   selected?: TypeListOfDropDown;
   isOpen: boolean;
   onSelect: (item: TypeListOfDropDown) => void;
-  customStyle?: any;
+  customStyleContainer?: any;
+  customStyleDropDownColor?: any;
 }
 
 export interface TypeListOfDropDown {

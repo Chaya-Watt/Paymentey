@@ -1,15 +1,27 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 
 import {HeaderBarHome, Wallet, MenuCard} from '@Components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS} from '@Constants';
+import {getStoreData} from '@Helpers';
+import {KEY_LOCAL_STORAGE} from '@Constants';
 
 const Home = () => {
   const menuList = [
     {menuTitle: 'To Day Transaction', data: {income: 100, expense: 300}},
     {menuTitle: 'Month Transaction', data: {income: 10000, expense: 5000}},
+    {menuTitle: 'Month Transaction', data: {income: 10000, expense: 5000}},
   ];
+
+  const getToken = async () => {
+    const token = await getStoreData(KEY_LOCAL_STORAGE.TOKEN);
+    console.log('token', token);
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
 
   return (
     <>
@@ -58,6 +70,8 @@ const styles = StyleSheet.create({
     marginTop: -50,
     alignItems: 'center',
 
+    marginBottom: 50,
+    paddingBottom: 30,
     backgroundColor: COLORS.WHITE,
     borderTopRightRadius: 40,
     borderTopLeftRadius: 40,
