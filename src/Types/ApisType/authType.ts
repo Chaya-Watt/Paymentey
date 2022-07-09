@@ -1,10 +1,11 @@
+import {UserType} from '@Types';
+
 export interface LoginRequestDataType {
   email: string;
   password: string;
 }
 
-export interface LoginResponseDataType {
-  response: object;
+export interface LoginResponseDataType extends UserType {
   token: string;
 }
 
@@ -15,7 +16,6 @@ export interface RegisterRequestDataType {
   username: string;
 }
 
-export interface RegisterResponseDataType {
-  response: object;
+export interface RegisterResponseDataType extends UserType {
   token: string;
 }

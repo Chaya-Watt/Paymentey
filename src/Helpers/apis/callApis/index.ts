@@ -1,1 +1,1 @@
-export {login, signup} from './authApis';
+export {login, signup, getUser} from './authApis';

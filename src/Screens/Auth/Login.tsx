@@ -10,11 +10,12 @@ import {
 import {useNavigation, CommonActions} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useAppDispatch} from '@Redux/hook';
 
 import {RootStackParams} from '@Types';
 import {TextInputField, ButtonComponent, ButtonLink} from '@Components';
-import {COLORS, FONTS, KEY_LOCAL_STORAGE} from '@Constants';
-import {login, storeData} from '@Helpers';
+import {COLORS, FONTS} from '@Constants';
+import {loginAction} from '@Redux/Slices/user';
 
 const height = Dimensions.get('window').height;
 const headerHeight = height / 3.5;
@@ -23,6 +24,7 @@ const bodyHeight = height - headerHeight;
 const Login = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams, 'AuthStack'>>();
+  const dispatch = useAppDispatch();
 
   const [valueForm, setValueForm] = useState<{
     email: string;
@@ -35,24 +37,14 @@ const Login = () => {
 
   const onPressLogin = async () => {
     const {email, password} = valueForm;
-
     try {
-      const response = await login({
-        email,
-        password,
-      });
-
-      await storeData(KEY_LOCAL_STORAGE.TOKEN, response.data.token);
-      navigation.navigate('TabStack', {
-        screen: 'HomeStack',
-        params: {screen: 'Home'},
-      });
+      await dispatch(loginAction({email, password})).unwrap();
 
       navigation.dispatch(
         CommonActions.reset({index: 1, routes: [{name: 'TabStack'}]}),
       );
     } catch (error: any) {
-      Alert.alert(error.response.data.message);
+      Alert.alert(error.message);
     }
   };
 

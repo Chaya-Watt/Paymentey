@@ -1,33 +1,26 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
+import {useAppSelector} from '@Redux/hook';
 
 import {HeaderBarHome, Wallet, MenuCard} from '@Components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS} from '@Constants';
-import {getStoreData} from '@Helpers';
-import {KEY_LOCAL_STORAGE} from '@Constants';
 
 const Home = () => {
+  const {user} = useAppSelector(state => state.user);
   const menuList = [
     {menuTitle: 'To Day Transaction', data: {income: 100, expense: 300}},
     {menuTitle: 'Month Transaction', data: {income: 10000, expense: 5000}},
     {menuTitle: 'Month Transaction', data: {income: 10000, expense: 5000}},
   ];
 
-  const getToken = async () => {
-    const token = await getStoreData(KEY_LOCAL_STORAGE.TOKEN);
-    console.log('token', token);
-  };
-
-  useEffect(() => {
-    getToken();
-  }, []);
+  console.log('user', user);
 
   return (
     <>
       <SafeAreaView edges={['top']} style={styles.safeAreaViewTop} />
       <HeaderBarHome
-        name="Chayanant Watt"
+        name={user.username}
         description="วันนี้กินให้น้อยๆ"
         imageProfile="https://reactnative.dev/img/tiny_logo.png"
       />

@@ -14,6 +14,7 @@ module.exports = {
           '@Screens': './src/Screens',
           '@Types': './src/Types',
           '@Icons': './src/Icons',
+          '@Redux': './src/Redux',
         },
       },
     ],

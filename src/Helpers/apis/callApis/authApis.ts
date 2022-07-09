@@ -5,6 +5,7 @@ import {
   RegisterRequestDataType,
   LoginRequestDataType,
   LoginResponseDataType,
+  UserType,
 } from '@Types';
 
 export const login = async (payload: LoginRequestDataType) => {
@@ -31,6 +32,23 @@ export const signup = async (payload: RegisterRequestDataType) => {
     url,
     method,
     data: payload,
+  });
+
+  return response;
+};
+
+export const getUser = async (token: string) => {
+  const url = ENDPOINT.AUTH.GET_USER;
+  const method = 'GET';
+
+  const headers = {
+    Authorization: 'Bearer ' + token,
+  };
+
+  const response = await service<UserType & {token: string}, string>({
+    url,
+    method,
+    headers,
   });
 
   return response;
