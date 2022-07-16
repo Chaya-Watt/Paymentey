@@ -7,14 +7,15 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useAppDispatch} from '@Redux/hook';
 
 import {RootStackParams} from '@Types';
 import {TextInputField, ButtonComponent} from '@Components';
-import {COLORS, FONTS, KEY_LOCAL_STORAGE} from '@Constants';
-import {signup, storeData} from '@Helpers';
+import {COLORS, FONTS} from '@Constants';
+import {signUpAction} from '@Redux/Slices';
 
 const height = Dimensions.get('window').height;
 const headerHeight = height / 3.5;
@@ -23,6 +24,7 @@ const bodyHeight = height - headerHeight;
 const Register = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams, 'AuthStack'>>();
+  const dispatch = useAppDispatch();
 
   const [valueForm, setValueForm] = useState<{
     email: string;
@@ -44,23 +46,20 @@ const Register = () => {
     const {email, password, confirmPassword, username} = valueForm;
 
     try {
-      const response = await signup({
-        email,
-        password,
-        confirmPassword,
-        username,
-      });
+      await dispatch(
+        signUpAction({
+          email,
+          password,
+          confirmPassword,
+          username,
+        }),
+      ).unwrap();
 
-      await storeData(KEY_LOCAL_STORAGE.TOKEN, response.data.token);
-
-      navigation.navigate('TabStack', {
-        screen: 'HomeStack',
-        params: {
-          screen: 'Home',
-        },
-      });
+      navigation.dispatch(
+        CommonActions.reset({index: 1, routes: [{name: 'TabStack'}]}),
+      );
     } catch (error: any) {
-      Alert.alert(error.response.data.message);
+      Alert.alert(error.message);
     }
   };
 

@@ -1,7 +1,11 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {loginAction, getUserAction} from './userAction';
+import {loginAction, getUserAction, signUpAction} from './userAction';
 import {STATUS} from '@Constants';
-import {LoginResponseDataType, UserType} from '@Types';
+import {
+  LoginResponseDataType,
+  UserType,
+  RegisterResponseDataType,
+} from '@Types';
 
 interface userInitialState {
   user: UserType & {token: string};
@@ -22,6 +26,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
+    //login action
     [loginAction.pending.type]: (state: userInitialState) => {
       state.status = STATUS.PENDING;
       state.isLoading = true;
@@ -43,13 +48,39 @@ const userSlice = createSlice({
       state.isLoading = false;
     },
 
+    //get user action
     [getUserAction.pending.type]: state => {
       state.status = STATUS.PENDING;
       state.isLoading = true;
     },
-    [getUserAction.fulfilled.type]: (state, action) => {
+    [getUserAction.fulfilled.type]: (
+      state,
+      action: PayloadAction<UserType & {token: string}>,
+    ) => {
       state.status = STATUS.SUCCESS;
       state.user = action.payload;
+      state.isLoading = false;
+    },
+
+    //signup action
+    [signUpAction.pending.type]: state => {
+      state.status = STATUS.PENDING;
+      state.isLoading = true;
+    },
+    [signUpAction.fulfilled.type]: (
+      state,
+      action: PayloadAction<RegisterResponseDataType>,
+    ) => {
+      state.status = STATUS.SUCCESS;
+      state.user = action.payload;
+      state.isLoading = false;
+    },
+    [signUpAction.rejected.type]: (
+      state,
+      action: PayloadAction<{message: string}>,
+    ) => {
+      state.status = STATUS.FAILED;
+      state.messageError = action.payload.message;
       state.isLoading = false;
     },
   },

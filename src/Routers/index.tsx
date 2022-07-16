@@ -9,20 +9,16 @@ import TabStackRoute from './TabStackRoute';
 import {RootStackParams} from '@Types';
 import {getStoreData} from '@Helpers';
 import {KEY_LOCAL_STORAGE} from '@Constants';
-import {getUserAction} from '@Redux/Slices';
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
 
 const Routers: React.FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>();
-  const dispatch = useAppDispatch();
 
   const checkUserLogin = async () => {
     const responseToken = await getStoreData(KEY_LOCAL_STORAGE.TOKEN);
 
     if (responseToken) {
-      dispatch(getUserAction(responseToken));
-
       setIsLogin(true);
     } else {
       setIsLogin(false);

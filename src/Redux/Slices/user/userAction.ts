@@ -1,12 +1,14 @@
+import {createAsyncThunk} from '@reduxjs/toolkit';
+
+import {login, storeData, getUser, signup} from '@Helpers';
+import {KEY_LOCAL_STORAGE} from '@Constants';
 import {
   LoginRequestDataType,
   LoginResponseDataType,
-} from '../../../Types/ApisType/authType';
-import {createAsyncThunk} from '@reduxjs/toolkit';
-
-import {login, storeData, getUser} from '@Helpers';
-import {KEY_LOCAL_STORAGE} from '@Constants';
-import {UserType} from '@Types';
+  RegisterRequestDataType,
+  RegisterResponseDataType,
+  UserType,
+} from '@Types';
 
 export const loginAction = createAsyncThunk<
   LoginResponseDataType,
@@ -23,6 +25,25 @@ export const loginAction = createAsyncThunk<
     return rejectWithValue(error.response.data);
   }
 });
+
+export const signUpAction = createAsyncThunk<
+  RegisterResponseDataType,
+  RegisterRequestDataType,
+  {rejectValue: any}
+>(
+  'user/signUp',
+  async (payload: RegisterRequestDataType, {rejectWithValue}) => {
+    try {
+      const response = await signup(payload);
+
+      await storeData(KEY_LOCAL_STORAGE.TOKEN, response.data.token);
+
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 
 export const getUserAction = createAsyncThunk<
   UserType & {token: string},

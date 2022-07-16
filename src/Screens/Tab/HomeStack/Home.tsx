@@ -1,20 +1,32 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {useAppSelector} from '@Redux/hook';
+import {useAppSelector, useAppDispatch} from '@Redux/hook';
 
+import {getUserAction} from '@Redux/Slices';
 import {HeaderBarHome, Wallet, MenuCard} from '@Components';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {COLORS} from '@Constants';
+import {COLORS, KEY_LOCAL_STORAGE} from '@Constants';
+import {getStoreData} from '@Helpers';
 
 const Home = () => {
   const {user} = useAppSelector(state => state.user);
+  const dispatch = useAppDispatch();
+
   const menuList = [
     {menuTitle: 'To Day Transaction', data: {income: 100, expense: 300}},
     {menuTitle: 'Month Transaction', data: {income: 10000, expense: 5000}},
     {menuTitle: 'Month Transaction', data: {income: 10000, expense: 5000}},
   ];
 
-  console.log('user', user);
+  const getUser = async () => {
+    const responseToken = await getStoreData(KEY_LOCAL_STORAGE.TOKEN);
+
+    responseToken && dispatch(getUserAction(responseToken));
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <>
