@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useAppSelector} from '@Redux/hook';
 
-import {COLORS} from '@Constants';
+import {COLORS, KEY_LOCAL_STORAGE} from '@Constants';
 import {
   ButtonComponent,
   DropDown,
@@ -13,12 +14,15 @@ import {
 import coinIcon from '@Icons/dollar-icon.png';
 import arrowUpIcon from '@Icons/arrow-up-icon.png';
 import arrowDownIcon from '@Icons/arrow-down-icon.png';
-import {TypeListOfDropDown} from '@Types';
+import {CreateTransactionRequestType, TypeListOfDropDown} from '@Types';
+import {createTransaction, getStoreData} from '@Helpers';
 
-function CreateTransaction() {
+const CreateTransaction = () => {
+  const {user} = useAppSelector(state => state.user);
   const [selectedTypeTransaction, setSelectedTypeTransaction] =
     useState<TypeListOfDropDown>();
   const [isOpenSelected, setIsOpenSelected] = useState<boolean>(false);
+
   const [formValue, setFormValue] = useState<{
     topic: string;
     amount: string;
@@ -66,8 +70,25 @@ function CreateTransaction() {
     },
   ];
 
-  const handleCreateTransaction = () => {
-    console.log('formValue', formValue);
+  const handleCreateTransaction = async () => {
+    const token = await getStoreData(KEY_LOCAL_STORAGE.TOKEN);
+
+    const dataCreateTransaction: CreateTransactionRequestType = {
+      walletId: '1',
+      creator: user.id,
+      typeOfTransaction: selectedTypeTransaction
+        ? selectedTypeTransaction.value
+        : '',
+      ...formValue,
+      amount: Number(formValue.amount),
+    };
+
+    const responseCreateTransaction = await createTransaction(
+      dataCreateTransaction,
+      token || '',
+    );
+
+    console.log('responseCreateTransaction', responseCreateTransaction);
 
     setFormValue({
       topic: '',
@@ -114,28 +135,30 @@ function CreateTransaction() {
         <FlatList
           style={{marginVertical: 10}}
           data={fieldForm}
-          renderItem={({item}) => (
-            <TextInputField
-              label={item.label}
-              value={
-                formValue[
-                  item.label.toLocaleLowerCase() as keyof {
-                    topic: string;
-                    amount: string;
-                    date: string;
-                    note: string;
-                  }
-                ]
-              }
-              onChangeText={value =>
-                setFormValue({
-                  ...formValue,
-                  [item.label.toLocaleLowerCase()]: value,
-                })
-              }
-              customStyle={{width: '100%', marginVertical: 10}}
-            />
-          )}
+          renderItem={({item}) => {
+            return (
+              <TextInputField
+                label={item.label}
+                value={
+                  formValue[
+                    item.label.toLocaleLowerCase() as keyof {
+                      topic: string;
+                      amount: string;
+                      date: string;
+                      note: string;
+                    }
+                  ]
+                }
+                onChangeText={value =>
+                  setFormValue({
+                    ...formValue,
+                    [item.label.toLocaleLowerCase()]: value,
+                  })
+                }
+                customStyle={{width: '100%', marginVertical: 10}}
+              />
+            );
+          }}
         />
         <ButtonComponent
           title="Create"
@@ -144,7 +167,7 @@ function CreateTransaction() {
       </View>
     </>
   );
-}
+};
 
 export default CreateTransaction;
 

@@ -4,6 +4,9 @@ const ENDPOINT = {
     LOGIN: '/user/login',
     REGISTER: '/user/signup',
   },
+  TRANSACTION: {
+    CREATE: '/transaction/create',
+  },
 };
 
 export default ENDPOINT;
