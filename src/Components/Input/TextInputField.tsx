@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, View, StyleSheet, TextInput} from 'react-native';
-import {FONTS} from '@Constants';
+import {COLORS, FONTS} from '@Constants';
 import {TypeTextInputField} from '@Types';
 
 const TextInputField: React.FC<TypeTextInputField> = ({
@@ -29,7 +29,7 @@ const styles = ({mt, mb}: {mt?: number; mb?: number}) =>
   StyleSheet.create({
     label: {
       fontSize: 14,
-      color: 'black',
+      color: COLORS.BLACK,
       marginBottom: 8,
       fontFamily: FONTS.MITR_REGULAR,
     },

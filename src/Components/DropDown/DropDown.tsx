@@ -71,12 +71,13 @@ export default DropDown;
 
 const styles = StyleSheet.create({
   width: {
-    width: 280,
+    width: '100%',
   },
 
   label: {
     fontFamily: FONTS.MITR_REGULAR,
     color: COLORS.BLACK,
+    fontSize: 14,
     marginBottom: 5,
   },
 
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
 
   textTitle: {
     fontFamily: FONTS.MITR_MEDIUM,
-    fontSize: 16,
+    fontSize: 14,
     color: COLORS.WHITE,
   },
 
@@ -115,9 +116,10 @@ const styles = StyleSheet.create({
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-    elevation: 2,
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+
+    elevation: 1,
   },
 
   select: {

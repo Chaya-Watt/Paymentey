@@ -4,6 +4,6 @@ export interface CreateTransactionRequestType {
   typeOfTransaction: string | number;
   topic: string;
   amount: number;
-  date: string;
+  date: Date;
   note?: string;
 }

@@ -11,3 +11,8 @@ export interface TypeButtonLink {
   customStyleContainer?: any;
   customStyleText?: any;
 }
+
+export interface TypeButtonDate {
+  date: string;
+  onPressIcon: () => void;
+}

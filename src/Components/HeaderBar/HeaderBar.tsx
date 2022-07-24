@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
+    height: 70,
     paddingHorizontal: 15,
     paddingVertical: 10,
     backgroundColor: COLORS.SOFT_BLUE,
