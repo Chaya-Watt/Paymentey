@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text, ScrollView} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAppSelector} from '@Redux/hook';
+import DatePicker from 'react-native-date-picker';
+import dayjs from 'dayjs';
 
-import {COLORS, KEY_LOCAL_STORAGE} from '@Constants';
+import {COLORS, FONTS, KEY_LOCAL_STORAGE} from '@Constants';
 import {
   ButtonComponent,
+  ButtonSelectDate,
   DropDown,
   HeaderBar,
   TextInputField,
@@ -22,16 +25,17 @@ const CreateTransaction = () => {
   const [selectedTypeTransaction, setSelectedTypeTransaction] =
     useState<TypeListOfDropDown>();
   const [isOpenSelected, setIsOpenSelected] = useState<boolean>(false);
+  const [isOpenSelectDate, setIsOpenSelectDate] = useState<boolean>(false);
 
   const [formValue, setFormValue] = useState<{
     topic: string;
     amount: string;
-    date: string;
+    date: Date;
     note: string;
   }>({
     topic: '',
     amount: '',
-    date: '',
+    date: new Date(),
     note: '',
   });
 
@@ -45,11 +49,6 @@ const CreateTransaction = () => {
       label: 'Amount',
       isRequire: true,
       errorMessage: 'กรุณาใส่จำนวนเงิน',
-    },
-    {
-      label: 'Date',
-      isRequire: true,
-      errorMessage: 'กรุณาระบุวันที่',
     },
     {
       label: 'Note',
@@ -69,6 +68,15 @@ const CreateTransaction = () => {
       value: 'Expense',
     },
   ];
+
+  const handleOpenSelectDate = () => {
+    setIsOpenSelectDate(!isOpenSelectDate);
+  };
+
+  const onConfirmDate = (date: Date) => {
+    setFormValue({...formValue, date});
+    setIsOpenSelectDate(false);
+  };
 
   const handleCreateTransaction = async () => {
     const token = await getStoreData(KEY_LOCAL_STORAGE.TOKEN);
@@ -93,7 +101,7 @@ const CreateTransaction = () => {
     setFormValue({
       topic: '',
       amount: '',
-      date: '',
+      date: new Date(),
       note: '',
     });
 
@@ -110,61 +118,77 @@ const CreateTransaction = () => {
         headerDescription="Balance"
         description={10000}
       />
-      <View style={styles.containerContent}>
-        <View style={styles.positionSelectTransaction}>
-          <DropDown
-            label="Select Type Of Transaction"
-            listSelect={listTypeTransaction}
-            selected={selectedTypeTransaction}
-            isOpen={isOpenSelected}
-            onPress={() => setIsOpenSelected(!isOpenSelected)}
-            onSelect={item => {
-              setSelectedTypeTransaction(item);
-              setIsOpenSelected(false);
-            }}
-            customStyleDropDownColor={
-              selectedTypeTransaction && {
-                backgroundColor:
-                  selectedTypeTransaction.id === 1 ? COLORS.GREEN : COLORS.RED,
-              }
+      <ScrollView
+        style={styles.containerContent}
+        contentContainerStyle={styles.containerScrollView}>
+        <DropDown
+          label="Select Type Of Transaction"
+          listSelect={listTypeTransaction}
+          selected={selectedTypeTransaction}
+          isOpen={isOpenSelected}
+          onPress={() => setIsOpenSelected(!isOpenSelected)}
+          onSelect={item => {
+            setSelectedTypeTransaction(item);
+            setIsOpenSelected(false);
+          }}
+          customStyleDropDownColor={
+            selectedTypeTransaction && {
+              backgroundColor:
+                selectedTypeTransaction.id === 1 ? COLORS.GREEN : COLORS.RED,
             }
-            placeholder="Select Type Of Transaction"
-            icon={isOpenSelected ? arrowUpIcon : arrowDownIcon}
+          }
+          placeholder="Select Type Of Transaction"
+          icon={isOpenSelected ? arrowUpIcon : arrowDownIcon}
+        />
+        <View style={{marginVertical: 10}}>
+          <Text style={styles.labelDate}>Select Date Transaction</Text>
+          <ButtonSelectDate
+            date={dayjs(formValue.date).format('DD MMM YYYY HH:mm')}
+            onPressIcon={handleOpenSelectDate}
           />
         </View>
-        <FlatList
-          style={{marginVertical: 10}}
-          data={fieldForm}
-          renderItem={({item}) => {
-            return (
-              <TextInputField
-                label={item.label}
-                value={
-                  formValue[
-                    item.label.toLocaleLowerCase() as keyof {
-                      topic: string;
-                      amount: string;
-                      date: string;
-                      note: string;
-                    }
-                  ]
+
+        {fieldForm.map(item => (
+          <TextInputField
+            label={item.label}
+            value={
+              formValue[
+                item.label.toLocaleLowerCase() as keyof {
+                  topic: string;
+                  amount: string;
+                  note: string;
                 }
-                onChangeText={value =>
-                  setFormValue({
-                    ...formValue,
-                    [item.label.toLocaleLowerCase()]: value,
-                  })
-                }
-                customStyle={{width: '100%', marginVertical: 10}}
-              />
-            );
-          }}
+              ]
+            }
+            onChangeText={value =>
+              setFormValue({
+                ...formValue,
+                [item.label.toLocaleLowerCase()]: value,
+              })
+            }
+            customStyle={{width: '100%', marginBottom: 10}}
+          />
+        ))}
+
+        <DatePicker
+          modal
+          mode="datetime"
+          locale="th"
+          open={isOpenSelectDate}
+          date={formValue.date}
+          onConfirm={onConfirmDate}
+          onCancel={handleOpenSelectDate}
+          title="Please Select Transaction Date"
+          theme="auto"
+          textColor={COLORS.BLACK}
         />
+
         <ButtonComponent
           title="Create"
           onPress={() => handleCreateTransaction()}
+          customStyleContainer={{marginTop: 10}}
         />
-      </View>
+      </ScrollView>
     </>
   );
 };
@@ -179,13 +203,21 @@ const styles = StyleSheet.create({
 
   containerContent: {
     flex: 1,
-    padding: 15,
+    width: '100%',
     marginBottom: 50,
-    paddingBottom: 45,
     backgroundColor: COLORS.WHITE,
   },
 
-  positionSelectTransaction: {
-    alignSelf: 'center',
+  containerScrollView: {
+    paddingHorizontal: 15,
+    paddingTop: 15,
+    paddingBottom: 45,
+  },
+
+  labelDate: {
+    fontFamily: FONTS.MITR_REGULAR,
+    fontSize: 14,
+    color: COLORS.BLACK,
+    marginBottom: 8,
   },
 });
