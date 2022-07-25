@@ -11,6 +11,8 @@ export interface TypeDropDownProps {
   onSelect: (item: TypeListOfDropDown) => void;
   customStyleContainer?: any;
   customStyleDropDownColor?: any;
+  isError: boolean;
+  textError: string;
 }
 
 export interface TypeListOfDropDown {

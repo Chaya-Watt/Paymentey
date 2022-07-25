@@ -9,16 +9,19 @@ const TextInputField: React.FC<TypeTextInputField> = ({
   placeholder,
   onChangeText,
   customStyle,
+  isError,
+  textError,
 }) => {
   return (
-    <View style={customStyle}>
+    <View style={[customStyle]}>
       <Text style={styles({}).label}>{label}</Text>
       <TextInput
-        style={styles({}).input}
+        style={[styles({}).input, isError && styles({}).errorStyle]}
         value={value}
         placeholder={placeholder}
         onChangeText={onChangeText}
       />
+      {isError && <Text style={styles({}).textError}>{textError}</Text>}
     </View>
   );
 };
@@ -46,5 +49,16 @@ const styles = ({mt, mb}: {mt?: number; mb?: number}) =>
       borderWidth: 1,
 
       fontFamily: FONTS.MITR_LIGHT,
+    },
+
+    errorStyle: {
+      borderColor: COLORS.RED,
+    },
+
+    textError: {
+      color: COLORS.RED,
+      fontFamily: FONTS.MITR_LIGHT,
+      fontSize: 12,
+      marginTop: 3,
     },
   });

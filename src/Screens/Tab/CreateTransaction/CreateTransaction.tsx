@@ -28,31 +28,37 @@ const CreateTransaction = () => {
   const [isOpenSelectDate, setIsOpenSelectDate] = useState<boolean>(false);
 
   const [formValue, setFormValue] = useState<{
+    typeOfTransaction: string;
     topic: string;
     amount: string;
     date: Date;
     note: string;
   }>({
+    typeOfTransaction: '',
     topic: '',
     amount: '',
     date: new Date(),
     note: '',
   });
 
+  const [errors, setErrors] = useState({
+    typeOfTransaction: false,
+    date: false,
+    topic: false,
+    amount: false,
+  });
+
   const fieldForm = [
     {
       label: 'Topic',
-      isRequire: true,
       errorMessage: 'กรุณาใส่หัวข้อ',
     },
     {
       label: 'Amount',
-      isRequire: true,
       errorMessage: 'กรุณาใส่จำนวนเงิน',
     },
     {
       label: 'Note',
-      isRequire: false,
     },
   ];
 
@@ -78,34 +84,75 @@ const CreateTransaction = () => {
     setIsOpenSelectDate(false);
   };
 
+  const handelCheckValidate = async ({
+    topic,
+    amount,
+    typeOfTransaction,
+  }: {
+    topic: string;
+    amount: string;
+    typeOfTransaction: string;
+  }) => {
+    if (!topic || !amount || !typeOfTransaction) {
+      !topic
+        ? setErrors(prevState => ({...prevState, topic: true}))
+        : setErrors(prevState => ({...prevState, topic: false}));
+
+      !amount
+        ? setErrors(prevState => ({...prevState, amount: true}))
+        : setErrors(prevState => ({...prevState, amount: false}));
+
+      !typeOfTransaction
+        ? setErrors(prevState => ({...prevState, typeOfTransaction: true}))
+        : setErrors(prevState => ({...prevState, typeOfTransaction: false}));
+
+      return false;
+    } else {
+      setErrors({
+        typeOfTransaction: false,
+        date: false,
+        topic: false,
+        amount: false,
+      });
+
+      return true;
+    }
+  };
+
   const handleCreateTransaction = async () => {
     const token = await getStoreData(KEY_LOCAL_STORAGE.TOKEN);
 
-    const dataCreateTransaction: CreateTransactionRequestType = {
-      walletId: '1',
-      creator: user.id,
-      typeOfTransaction: selectedTypeTransaction
-        ? selectedTypeTransaction.value
-        : '',
-      ...formValue,
-      amount: Number(formValue.amount),
-    };
+    const {topic, amount, typeOfTransaction} = formValue;
 
-    const responseCreateTransaction = await createTransaction(
-      dataCreateTransaction,
-      token || '',
-    );
-
-    console.log('responseCreateTransaction', responseCreateTransaction);
-
-    setFormValue({
-      topic: '',
-      amount: '',
-      date: new Date(),
-      note: '',
+    const isValidate = await handelCheckValidate({
+      topic,
+      amount,
+      typeOfTransaction,
     });
 
-    setSelectedTypeTransaction(undefined);
+    if (isValidate) {
+      const dataCreateTransaction: CreateTransactionRequestType = {
+        walletId: '1',
+        creator: user.id,
+        ...formValue,
+        amount: Number(formValue.amount),
+      };
+
+      const responseCreateTransaction = await createTransaction(
+        dataCreateTransaction,
+        token || '',
+      );
+
+      setFormValue({
+        typeOfTransaction: '',
+        topic: '',
+        amount: '',
+        date: new Date(),
+        note: '',
+      });
+
+      setSelectedTypeTransaction(undefined);
+    }
   };
 
   return (
@@ -130,6 +177,11 @@ const CreateTransaction = () => {
           onSelect={item => {
             setSelectedTypeTransaction(item);
             setIsOpenSelected(false);
+            setFormValue({
+              ...formValue,
+              typeOfTransaction:
+                typeof item.value === 'string' ? item.value : '',
+            });
           }}
           customStyleDropDownColor={
             selectedTypeTransaction && {
@@ -139,6 +191,8 @@ const CreateTransaction = () => {
           }
           placeholder="Select Type Of Transaction"
           icon={isOpenSelected ? arrowUpIcon : arrowDownIcon}
+          isError={errors.typeOfTransaction}
+          textError="กรุณาเลือกประเภทของรายการ"
         />
         <View style={{marginVertical: 10}}>
           <Text style={styles.labelDate}>Select Date Transaction</Text>
@@ -150,6 +204,7 @@ const CreateTransaction = () => {
 
         {fieldForm.map(item => (
           <TextInputField
+            key={item.label}
             label={item.label}
             value={
               formValue[
@@ -160,6 +215,15 @@ const CreateTransaction = () => {
                 }
               ]
             }
+            isError={
+              errors[
+                item.label.toLocaleLowerCase() as keyof {
+                  topic: boolean;
+                  amount: boolean;
+                }
+              ]
+            }
+            textError={item.errorMessage}
             onChangeText={value =>
               setFormValue({
                 ...formValue,

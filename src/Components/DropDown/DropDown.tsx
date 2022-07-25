@@ -14,6 +14,8 @@ const DropDown: React.FC<TypeDropDownProps> = ({
   onSelect,
   customStyleContainer,
   customStyleDropDownColor,
+  isError,
+  textError,
 }) => {
   return (
     <View style={[styles.width, customStyleContainer]}>
@@ -43,6 +45,7 @@ const DropDown: React.FC<TypeDropDownProps> = ({
           ))}
         </View>
       )}
+      {isError && <Text style={styles.textError}>{textError}</Text>}
     </View>
   );
 };
@@ -140,5 +143,12 @@ const styles = StyleSheet.create({
   textSelect: {
     fontSize: 14,
     fontFamily: FONTS.MITR_REGULAR,
+  },
+
+  textError: {
+    color: COLORS.RED,
+    fontFamily: FONTS.MITR_LIGHT,
+    fontSize: 12,
+    marginTop: 3,
   },
 });
