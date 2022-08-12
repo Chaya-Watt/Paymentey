@@ -7,6 +7,11 @@ const ENDPOINT = {
   TRANSACTION: {
     CREATE: '/transaction/create',
   },
+  WALLET: {
+    GET_WALLET: '/wallet',
+    CREATE: '/wallet/create',
+    EDIT: '/wallet/edit',
+  },
 };
 
 export default ENDPOINT;

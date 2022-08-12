@@ -22,11 +22,12 @@ import {createTransaction, getStoreData} from '@Helpers';
 
 const CreateTransaction = () => {
   const {user} = useAppSelector(state => state.user);
+  const {wallet} = useAppSelector(state => state.wallet);
+
   const [selectedTypeTransaction, setSelectedTypeTransaction] =
     useState<TypeListOfDropDown>();
   const [isOpenSelected, setIsOpenSelected] = useState<boolean>(false);
   const [isOpenSelectDate, setIsOpenSelectDate] = useState<boolean>(false);
-
   const [formValue, setFormValue] = useState<{
     typeOfTransaction: string;
     topic: string;
@@ -132,16 +133,13 @@ const CreateTransaction = () => {
 
     if (isValidate) {
       const dataCreateTransaction: CreateTransactionRequestType = {
-        walletId: '1',
+        walletId: wallet.id,
         creator: user.id,
         ...formValue,
         amount: Number(formValue.amount),
       };
 
-      const responseCreateTransaction = await createTransaction(
-        dataCreateTransaction,
-        token || '',
-      );
+      await createTransaction(dataCreateTransaction, token || '');
 
       setFormValue({
         typeOfTransaction: '',

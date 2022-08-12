@@ -1,16 +1,18 @@
-import React, {useEffect} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import React, {useCallback} from 'react';
+import {Alert, ScrollView, StyleSheet, View} from 'react-native';
 import {useAppSelector, useAppDispatch} from '@Redux/hook';
+import {useFocusEffect} from '@react-navigation/native';
 
-import {getUserAction} from '@Redux/Slices';
+import {getUserAction, getWalletAction} from '@Redux/Slices';
 import {HeaderBarHome, Wallet, MenuCard} from '@Components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS, KEY_LOCAL_STORAGE} from '@Constants';
 import {getStoreData} from '@Helpers';
 
 const Home = () => {
-  const {user} = useAppSelector(state => state.user);
   const dispatch = useAppDispatch();
+  const {user} = useAppSelector(state => state.user);
+  const {wallet, isLoading} = useAppSelector(state => state.wallet);
 
   const menuList = [
     {menuTitle: 'To Day Transaction', data: {income: 100, expense: 300}},
@@ -18,15 +20,36 @@ const Home = () => {
     {menuTitle: 'Month Transaction', data: {income: 10000, expense: 5000}},
   ];
 
-  const getUser = async () => {
-    const responseToken = await getStoreData(KEY_LOCAL_STORAGE.TOKEN);
-
-    responseToken && dispatch(getUserAction(responseToken));
+  const getUser = async (token: string) => {
+    try {
+      await dispatch(getUserAction(token)).unwrap();
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
   };
 
-  useEffect(() => {
-    getUser();
-  }, []);
+  const getWalletUser = async (token: string) => {
+    try {
+      await dispatch(getWalletAction(token));
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
+
+  const getUserInfo = async () => {
+    const token = await getStoreData(KEY_LOCAL_STORAGE.TOKEN);
+
+    if (token) {
+      await getUser(token);
+      await getWalletUser(token);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      getUserInfo();
+    }, []),
+  );
 
   return (
     <>
@@ -39,7 +62,17 @@ const Home = () => {
 
       <View style={styles.containerContent}>
         <View style={styles.positionWallet}>
-          <Wallet />
+          {isLoading ? (
+            <View
+              style={{
+                height: 100,
+                width: '100%',
+                backgroundColor: 'red',
+              }}
+            />
+          ) : (
+            <Wallet walletName={wallet.walletName} balance={wallet.balance} />
+          )}
         </View>
         <ScrollView
           showsVerticalScrollIndicator={false}

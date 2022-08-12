@@ -28,7 +28,7 @@ const Routers: React.FC = () => {
     checkUserLogin();
   }, []);
 
-  if (!isLogin) {
+  if (isLogin == null) {
     return null;
   } else {
     return (

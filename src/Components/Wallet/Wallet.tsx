@@ -3,13 +3,14 @@ import {View, StyleSheet, Text} from 'react-native';
 
 import {COLORS, FONTS} from '@Constants';
 import {formatCurrency} from '@Helpers';
+import {WalletComponentType} from '@Types';
 
-const Wallet = () => {
-  const currency = formatCurrency(10000000, true);
+const Wallet: React.FC<WalletComponentType> = ({walletName, balance}) => {
+  const currency = formatCurrency(balance, true);
 
   return (
     <View style={styles.containerWallet}>
-      <Text style={styles.titleBalance}>Available Balance</Text>
+      <Text style={styles.titleBalance}>Wallet : {walletName}</Text>
       <Text style={styles.amount}>{currency}</Text>
     </View>
   );
