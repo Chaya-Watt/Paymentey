@@ -1,4 +1,4 @@
 export interface TypePropMenuCard {
   menuTitle: string;
-  dataTransaction: object;
+  dataTransaction: {income: number; expense: number};
 }

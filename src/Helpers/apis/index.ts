@@ -1,6 +1,13 @@
 import service from './service';
 import ENDPOINT from './endpoint';
-import {signup, login, getUser, createTransaction, getWallet} from './callApis';
+import {
+  signup,
+  login,
+  getUser,
+  createTransaction,
+  getWallet,
+  getSummaryTransaction,
+} from './callApis';
 
 export {
   service,
@@ -10,4 +17,5 @@ export {
   getUser,
   createTransaction,
   getWallet,
+  getSummaryTransaction,
 };

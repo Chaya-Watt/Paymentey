@@ -8,12 +8,14 @@ const service = async <T, D>({
   url,
   headers,
   data,
+  params,
 }: AxiosRequestConfig<D>): Promise<AxiosResponse<T, D>> => {
   const response = await axios({
     method,
     url,
     headers,
     data,
+    params,
   });
 
   return response;

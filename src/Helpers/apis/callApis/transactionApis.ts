@@ -1,6 +1,9 @@
 import service from '../service';
 import ENDPOINT from '../endpoint';
-import {CreateTransactionRequestType} from '@Types';
+import {
+  CreateTransactionRequestType,
+  GetSummaryTransactionRequestType,
+} from '@Types';
 
 export const createTransaction = async (
   payload: CreateTransactionRequestType,
@@ -19,6 +22,25 @@ export const createTransaction = async (
     data: payload,
   });
 
-  console.log('response', response);
+  return response;
+};
+
+export const getSummaryTransaction = async (
+  payload: GetSummaryTransactionRequestType,
+  token: string,
+) => {
+  const method = 'GET';
+  const url = ENDPOINT.TRANSACTION.GET_SUMMARY;
+  const headers = {
+    Authorization: 'Bearer ' + token,
+  };
+
+  const response = await service<any, GetSummaryTransactionRequestType>({
+    method,
+    url,
+    headers,
+    params: payload,
+  });
+
   return response;
 };

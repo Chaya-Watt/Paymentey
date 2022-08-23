@@ -1,24 +1,44 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Alert, ScrollView, StyleSheet, View} from 'react-native';
 import {useAppSelector, useAppDispatch} from '@Redux/hook';
 import {useFocusEffect} from '@react-navigation/native';
+import dayjs from 'dayjs';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
 
 import {getUserAction, getWalletAction} from '@Redux/Slices';
 import {HeaderBarHome, Wallet, MenuCard} from '@Components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS, KEY_LOCAL_STORAGE} from '@Constants';
-import {getStoreData} from '@Helpers';
+import {getStoreData, getSummaryTransaction} from '@Helpers';
+import {WalletResponseType} from '@Types';
+
+dayjs.extend(weekOfYear);
 
 const Home = () => {
   const dispatch = useAppDispatch();
   const {user} = useAppSelector(state => state.user);
   const {wallet, isLoading} = useAppSelector(state => state.wallet);
 
-  const menuList = [
-    {menuTitle: 'To Day Transaction', data: {income: 100, expense: 300}},
-    {menuTitle: 'Month Transaction', data: {income: 10000, expense: 5000}},
-    {menuTitle: 'Month Transaction', data: {income: 10000, expense: 5000}},
-  ];
+  const currentWeek = dayjs().week() - 1;
+  const currentMonth = dayjs().month() + 1;
+
+  const [menuList, setMenuList] = useState([
+    {
+      type: 'day',
+      menuTitle: 'To Day Transaction',
+      data: {income: 0, expense: 0},
+    },
+    {
+      type: 'week',
+      menuTitle: 'Week Transaction',
+      data: {income: 0, expense: 0},
+    },
+    {
+      type: 'month',
+      menuTitle: 'Month Transaction',
+      data: {income: 0, expense: 0},
+    },
+  ]);
 
   const getUser = async (token: string) => {
     try {
@@ -30,7 +50,40 @@ const Home = () => {
 
   const getWalletUser = async (token: string) => {
     try {
-      await dispatch(getWalletAction(token));
+      const responseWallet = await dispatch(getWalletAction(token));
+
+      return responseWallet.payload[0];
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
+
+  const getTransaction = async (token: string, walletId: string) => {
+    try {
+      const queryTransaction = {
+        week: currentWeek,
+        month: currentMonth,
+        walletId,
+      };
+
+      const responseTransaction = await getSummaryTransaction(
+        queryTransaction,
+        token,
+      );
+
+      console.log('responseTransaction', responseTransaction.data);
+
+      const updateMenuListData = menuList.map(menu => {
+        if (menu.type === 'day') {
+          return {...menu, data: responseTransaction.data.day};
+        } else if (menu.type === 'week') {
+          return {...menu, data: responseTransaction.data.week};
+        } else {
+          return {...menu, data: responseTransaction.data.month};
+        }
+      });
+
+      setMenuList(updateMenuListData);
     } catch (error: any) {
       Alert.alert(error.message);
     }
@@ -41,7 +94,8 @@ const Home = () => {
 
     if (token) {
       await getUser(token);
-      await getWalletUser(token);
+      const responseWallet: WalletResponseType = await getWalletUser(token);
+      await getTransaction(token, responseWallet.id);
     }
   };
 

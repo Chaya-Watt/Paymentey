@@ -7,3 +7,9 @@ export interface CreateTransactionRequestType {
   date: Date;
   note?: string;
 }
+
+export interface GetSummaryTransactionRequestType {
+  week: number;
+  month: number;
+  walletId: string;
+}
