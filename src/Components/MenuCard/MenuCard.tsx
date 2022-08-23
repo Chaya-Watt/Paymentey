@@ -5,7 +5,11 @@ import {COLORS, FONTS} from '@Constants';
 import {formatCurrency} from '@Helpers';
 import {TypePropMenuCard} from '@Types';
 
-const MenuCard: React.FC<TypePropMenuCard> = ({menuTitle, dataTransaction}) => {
+const MenuCard: React.FC<TypePropMenuCard> = ({
+  menuTitle,
+  dataTransaction,
+  onPress,
+}) => {
   const [isTotalPositive, setIsTotalPositive] = useState<boolean>();
   const {income, expense} = dataTransaction;
   const totalAmount = income - expense;
@@ -23,9 +27,7 @@ const MenuCard: React.FC<TypePropMenuCard> = ({menuTitle, dataTransaction}) => {
   }, [totalAmount]);
 
   return (
-    <TouchableOpacity
-      style={styles.containerMenuCard}
-      onPress={() => console.log('press')}>
+    <TouchableOpacity style={styles.containerMenuCard} onPress={onPress}>
       <View style={styles.containerContentHeader}>
         <Text style={styles.textMenu}>{menuTitle}</Text>
         <Text

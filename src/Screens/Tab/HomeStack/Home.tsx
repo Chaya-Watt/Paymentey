@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {Alert, ScrollView, StyleSheet, View} from 'react-native';
 import {useAppSelector, useAppDispatch} from '@Redux/hook';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 
@@ -10,7 +10,8 @@ import {HeaderBarHome, Wallet, MenuCard} from '@Components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS, KEY_LOCAL_STORAGE} from '@Constants';
 import {getStoreData, getSummaryTransaction} from '@Helpers';
-import {WalletResponseType} from '@Types';
+import {HomeStackParams, WalletResponseType} from '@Types';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 dayjs.extend(weekOfYear);
 
@@ -18,6 +19,8 @@ const Home = () => {
   const dispatch = useAppDispatch();
   const {user} = useAppSelector(state => state.user);
   const {wallet, isLoading} = useAppSelector(state => state.wallet);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<HomeStackParams, 'Home'>>();
 
   const currentWeek = dayjs().week() - 1;
   const currentMonth = dayjs().month() + 1;
@@ -70,8 +73,6 @@ const Home = () => {
         queryTransaction,
         token,
       );
-
-      console.log('responseTransaction', responseTransaction.data);
 
       const updateMenuListData = menuList.map(menu => {
         if (menu.type === 'day') {
@@ -140,6 +141,11 @@ const Home = () => {
               key={index}
               menuTitle={menu.menuTitle}
               dataTransaction={menu.data}
+              onPress={() =>
+                navigation.navigate('History', {
+                  typeHistory: menu.type,
+                })
+              }
             />
           ))}
         </ScrollView>
