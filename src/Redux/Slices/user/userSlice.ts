@@ -61,6 +61,14 @@ const userSlice = createSlice({
       state.user = action.payload;
       state.isLoading = false;
     },
+    [getUserAction.rejected.type]: (
+      state,
+      action: PayloadAction<{message: string}>,
+    ) => {
+      state.status = STATUS.FAILED;
+      state.messageError = action.payload.message;
+      state.isLoading = false;
+    },
 
     //signup action
     [signUpAction.pending.type]: state => {

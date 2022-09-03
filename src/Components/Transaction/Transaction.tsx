@@ -2,22 +2,34 @@ import React from 'react';
 import {Text, View, StyleSheet, Image} from 'react-native';
 import HistoryIcon from '@Icons/history-icon.png';
 import {COLORS, FONTS} from '@Constants';
+import dayjs from 'dayjs';
+import {formatCurrency} from '@Helpers';
 
-const Transaction = () => {
+const Transaction = ({data}) => {
+  const isExpense = data.typeOfTransaction === 'Expense';
+
   return (
-    <View style={styles.containerTransaction}>
+    <View
+      style={[
+        styles.containerTransaction,
+        styleColorTransaction({isExpense}).containerColor,
+      ]}>
       <View style={styles.containerIcon}>
         <Image source={HistoryIcon} style={styles.icon} />
       </View>
       <View style={styles.containerText}>
         <Text style={styles.topicText} numberOfLines={1}>
-          Topic Transaction
+          {data.topic}
         </Text>
         <Text style={styles.timeText} numberOfLines={1}>
-          12:00
+          {dayjs(data.date).format('HH:mm')}
         </Text>
       </View>
-      <Text style={styles.containerAmount}>- 50000 B</Text>
+      <Text style={[styles.containerAmount, isExpense && {color: COLORS.RED}]}>
+        {isExpense
+          ? formatCurrency(-data.amount, true)
+          : formatCurrency(data.amount, true)}
+      </Text>
     </View>
   );
 };
@@ -26,26 +38,16 @@ export default Transaction;
 
 const styles = StyleSheet.create({
   containerTransaction: {
-    flex: 1,
     flexDirection: 'row',
     minHeight: 50,
     flexWrap: 'wrap',
+    marginHorizontal: 15,
+    marginVertical: 10,
 
-    backgroundColor: COLORS.WHITE,
     borderRadius: 10,
     padding: 15,
     justifyContent: 'space-between',
     alignItems: 'center',
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-
-    elevation: 2,
   },
 
   containerIcon: {
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
     minWidth: 40,
     maxWidth: 40,
     maxHeight: 40,
-    backgroundColor: COLORS.GRAY,
+    backgroundColor: COLORS.WHITE,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -66,6 +68,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 20,
     height: 20,
+    tintColor: COLORS.DARK_GRAY,
   },
 
   containerText: {
@@ -83,12 +86,19 @@ const styles = StyleSheet.create({
   timeText: {
     fontFamily: FONTS.MITR_LIGHT,
     fontSize: 12,
-    color: COLORS.GRAY,
+    color: COLORS.DARK_GRAY,
   },
 
   containerAmount: {
-    color: COLORS.RED,
+    color: COLORS.GREEN,
     fontFamily: FONTS.MITR_REGULAR,
     textAlign: 'center',
   },
 });
+
+const styleColorTransaction = ({isExpense}: {isExpense?: boolean}) =>
+  StyleSheet.create({
+    containerColor: {
+      backgroundColor: isExpense ? COLORS.SOFT_RED : COLORS.SOFT_GREEN,
+    },
+  });

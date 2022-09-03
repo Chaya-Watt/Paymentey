@@ -5,8 +5,9 @@ const ENDPOINT = {
     REGISTER: '/user/signup',
   },
   TRANSACTION: {
-    GET_SUMMARY: '/transaction/summary',
     CREATE: '/transaction/create',
+    GET_TRANSACTION_LIST: '/transaction',
+    GET_SUMMARY: '/transaction/summary',
   },
   WALLET: {
     GET_WALLET: '/wallet',

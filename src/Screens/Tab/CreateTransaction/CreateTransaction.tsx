@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useAppSelector} from '@Redux/hook';
 import DatePicker from 'react-native-date-picker';
@@ -163,94 +170,98 @@ const CreateTransaction = () => {
         headerDescription="Balance"
         description={10000}
       />
-      <ScrollView
-        style={styles.containerContent}
-        contentContainerStyle={styles.containerScrollView}>
-        <DropDown
-          label="Select Type Of Transaction"
-          listSelect={listTypeTransaction}
-          selected={selectedTypeTransaction}
-          isOpen={isOpenSelected}
-          onPress={() => setIsOpenSelected(!isOpenSelected)}
-          onSelect={item => {
-            setSelectedTypeTransaction(item);
-            setIsOpenSelected(false);
-            setFormValue({
-              ...formValue,
-              typeOfTransaction:
-                typeof item.value === 'string' ? item.value : '',
-            });
-          }}
-          customStyleDropDownColor={
-            selectedTypeTransaction && {
-              backgroundColor:
-                selectedTypeTransaction.id === 1 ? COLORS.GREEN : COLORS.RED,
-            }
-          }
-          placeholder="Select Type Of Transaction"
-          icon={isOpenSelected ? arrowUpIcon : arrowDownIcon}
-          isError={errors.typeOfTransaction}
-          textError="กรุณาเลือกประเภทของรายการ"
-        />
-        <View style={{marginVertical: 10}}>
-          <Text style={styles.labelDate}>Select Date Transaction</Text>
-          <ButtonSelectDate
-            date={dayjs(formValue.date).format('DD MMM YYYY HH:mm')}
-            onPressIcon={handleOpenSelectDate}
-          />
-        </View>
-
-        {fieldForm.map(item => (
-          <TextInputField
-            key={item.label}
-            label={item.label}
-            value={
-              formValue[
-                item.label.toLocaleLowerCase() as keyof {
-                  topic: string;
-                  amount: string;
-                  note: string;
-                }
-              ]
-            }
-            isError={
-              errors[
-                item.label.toLocaleLowerCase() as keyof {
-                  topic: boolean;
-                  amount: boolean;
-                }
-              ]
-            }
-            textError={item.errorMessage}
-            onChangeText={value =>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}>
+        <ScrollView
+          style={styles.containerContent}
+          contentContainerStyle={styles.containerScrollView}>
+          <DropDown
+            label="Select Type Of Transaction"
+            listSelect={listTypeTransaction}
+            selected={selectedTypeTransaction}
+            isOpen={isOpenSelected}
+            onPress={() => setIsOpenSelected(!isOpenSelected)}
+            onSelect={item => {
+              setSelectedTypeTransaction(item);
+              setIsOpenSelected(false);
               setFormValue({
                 ...formValue,
-                [item.label.toLocaleLowerCase()]: value,
-              })
+                typeOfTransaction:
+                  typeof item.value === 'string' ? item.value : '',
+              });
+            }}
+            customStyleDropDownColor={
+              selectedTypeTransaction && {
+                backgroundColor:
+                  selectedTypeTransaction.id === 1 ? COLORS.GREEN : COLORS.RED,
+              }
             }
-            customStyle={{width: '100%', marginBottom: 10}}
+            placeholder="Select Type Of Transaction"
+            icon={isOpenSelected ? arrowUpIcon : arrowDownIcon}
+            isError={errors.typeOfTransaction}
+            textError="กรุณาเลือกประเภทของรายการ"
           />
-        ))}
+          <View style={{marginVertical: 10}}>
+            <Text style={styles.labelDate}>Select Date Transaction</Text>
+            <ButtonSelectDate
+              date={dayjs(formValue.date).format('DD MMM YYYY HH:mm')}
+              onPressIcon={handleOpenSelectDate}
+            />
+          </View>
 
-        <DatePicker
-          modal
-          mode="datetime"
-          locale="th"
-          open={isOpenSelectDate}
-          date={formValue.date}
-          onConfirm={onConfirmDate}
-          onCancel={handleOpenSelectDate}
-          title="Please Select Transaction Date"
-          theme="auto"
-          textColor={COLORS.BLACK}
-        />
+          {fieldForm.map(item => (
+            <TextInputField
+              key={item.label}
+              label={item.label}
+              value={
+                formValue[
+                  item.label.toLocaleLowerCase() as keyof {
+                    topic: string;
+                    amount: string;
+                    note: string;
+                  }
+                ]
+              }
+              isError={
+                errors[
+                  item.label.toLocaleLowerCase() as keyof {
+                    topic: boolean;
+                    amount: boolean;
+                  }
+                ]
+              }
+              textError={item.errorMessage}
+              onChangeText={value =>
+                setFormValue({
+                  ...formValue,
+                  [item.label.toLocaleLowerCase()]: value,
+                })
+              }
+              customStyle={{width: '100%', marginBottom: 10}}
+            />
+          ))}
 
-        <ButtonComponent
-          title="Create"
-          onPress={() => handleCreateTransaction()}
-          customStyleContainer={{marginTop: 10}}
-        />
-      </ScrollView>
+          <DatePicker
+            modal
+            mode="datetime"
+            locale="th"
+            open={isOpenSelectDate}
+            date={formValue.date}
+            onConfirm={onConfirmDate}
+            onCancel={handleOpenSelectDate}
+            title="Please Select Transaction Date"
+            theme="auto"
+            textColor={COLORS.BLACK}
+          />
+
+          <ButtonComponent
+            title="Create"
+            onPress={() => handleCreateTransaction()}
+            customStyleContainer={{marginTop: 10}}
+          />
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 };
@@ -266,14 +277,13 @@ const styles = StyleSheet.create({
   containerContent: {
     flex: 1,
     width: '100%',
-    marginBottom: 50,
     backgroundColor: COLORS.WHITE,
   },
 
   containerScrollView: {
     paddingHorizontal: 15,
     paddingTop: 15,
-    paddingBottom: 45,
+    paddingBottom: 95,
   },
 
   labelDate: {

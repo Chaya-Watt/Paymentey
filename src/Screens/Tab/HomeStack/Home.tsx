@@ -22,6 +22,7 @@ const Home = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<HomeStackParams, 'Home'>>();
 
+  const currentDay = dayjs().format('YYYY-MM-DDTHH:mm:ss');
   const currentWeek = dayjs().week() - 1;
   const currentMonth = dayjs().month() + 1;
 
@@ -29,17 +30,17 @@ const Home = () => {
     {
       type: 'day',
       menuTitle: 'To Day Transaction',
-      data: {income: 0, expense: 0},
+      data: {income: 0, expense: 0, valueQuery: 0},
     },
     {
       type: 'week',
       menuTitle: 'Week Transaction',
-      data: {income: 0, expense: 0},
+      data: {income: 0, expense: 0, valueQuery: 0},
     },
     {
       type: 'month',
       menuTitle: 'Month Transaction',
-      data: {income: 0, expense: 0},
+      data: {income: 0, expense: 0, valueQuery: 0},
     },
   ]);
 
@@ -76,11 +77,23 @@ const Home = () => {
 
       const updateMenuListData = menuList.map(menu => {
         if (menu.type === 'day') {
-          return {...menu, data: responseTransaction.data.day};
+          return {
+            ...menu,
+            data: {
+              ...responseTransaction.data.day,
+              valueQuery: currentDay,
+            },
+          };
         } else if (menu.type === 'week') {
-          return {...menu, data: responseTransaction.data.week};
+          return {
+            ...menu,
+            data: {...responseTransaction.data.week, valueQuery: currentWeek},
+          };
         } else {
-          return {...menu, data: responseTransaction.data.month};
+          return {
+            ...menu,
+            data: {...responseTransaction.data.month, valueQuery: currentMonth},
+          };
         }
       });
 
@@ -90,7 +103,7 @@ const Home = () => {
     }
   };
 
-  const getUserInfo = async () => {
+  const getInfo = async () => {
     const token = await getStoreData(KEY_LOCAL_STORAGE.TOKEN);
 
     if (token) {
@@ -102,7 +115,7 @@ const Home = () => {
 
   useFocusEffect(
     useCallback(() => {
-      getUserInfo();
+      getInfo();
     }, []),
   );
 
@@ -144,6 +157,7 @@ const Home = () => {
               onPress={() =>
                 navigation.navigate('History', {
                   typeHistory: menu.type,
+                  valueQuery: menu.data.valueQuery,
                 })
               }
             />
@@ -168,8 +182,7 @@ const styles = StyleSheet.create({
     marginTop: -50,
     alignItems: 'center',
 
-    marginBottom: 50,
-    paddingBottom: 30,
+    paddingBottom: 80,
     backgroundColor: COLORS.WHITE,
     borderTopRightRadius: 40,
     borderTopLeftRadius: 40,

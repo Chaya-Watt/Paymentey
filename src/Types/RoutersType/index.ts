@@ -19,5 +19,5 @@ export type TabStackParams = {
 
 export type HomeStackParams = {
   Home: undefined;
-  History: {typeHistory: string};
+  History: {typeHistory: string; valueQuery: string | number};
 };

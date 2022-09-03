@@ -53,7 +53,7 @@ export const getUserAction = createAsyncThunk<
   try {
     const response = await getUser(token);
 
-    return response.data;
+    return {...response.data, token};
   } catch (error: any) {
     return rejectWithValue(error.response.data);
   }
