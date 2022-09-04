@@ -6,6 +6,8 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {useNavigation, CommonActions} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -57,41 +59,43 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView
-      edges={['right', 'left', 'bottom']}
-      style={styles.safeAreaView}>
+    <SafeAreaView edges={['right', 'left']} style={styles.safeAreaView}>
       <View style={styles.headerBackGround} />
-      <View style={styles.containerBody}>
-        <Text style={styles.textApp}>Paymentey</Text>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}>
-          <TextInputField
-            label="Email"
-            value={valueForm.email}
-            placeholder="กรุณากรอก Email"
-            customStyle={styles.marginEmailInput}
-            onChangeText={text => handleChangeValue(text, 'email')}
-          />
-          <TextInputField
-            label="Password"
-            value={valueForm.password}
-            placeholder="กรุณากรอก Password"
-            onChangeText={text => handleChangeValue(text, 'password')}
-          />
-          <ButtonComponent
-            title="Login"
-            onPress={onPressLogin}
-            customStyleContainer={styles.marginButtonLogin}
-          />
-          <ButtonLink
-            onPress={onPressForgotPassword}
-            title="Forgot Password ?"
-            customStyleContainer={styles.marginButtonForgotPassword}
-          />
-          <ButtonLink onPress={onPressSignUp} title="Sign Up" />
-        </ScrollView>
-      </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}>
+        <View style={styles.containerBody}>
+          <Text style={styles.textApp}>Paymentey</Text>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}>
+            <TextInputField
+              label="Email"
+              value={valueForm.email}
+              placeholder="กรุณากรอก Email"
+              customStyle={styles.marginEmailInput}
+              onChangeText={text => handleChangeValue(text, 'email')}
+            />
+            <TextInputField
+              label="Password"
+              value={valueForm.password}
+              placeholder="กรุณากรอก Password"
+              onChangeText={text => handleChangeValue(text, 'password')}
+            />
+            <ButtonComponent
+              title="Login"
+              onPress={onPressLogin}
+              customStyleContainer={styles.marginButtonLogin}
+            />
+            <ButtonLink
+              onPress={onPressForgotPassword}
+              title="Forgot Password ?"
+              customStyleContainer={styles.marginButtonForgotPassword}
+            />
+            <ButtonLink onPress={onPressSignUp} title="Sign Up" />
+          </ScrollView>
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -110,7 +114,8 @@ const styles = StyleSheet.create({
   },
 
   containerBody: {
-    top: -15,
+    flex: 1,
+    marginTop: -15,
     height: bodyHeight + 15,
     paddingHorizontal: 30,
     paddingTop: 15,

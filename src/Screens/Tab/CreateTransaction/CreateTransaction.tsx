@@ -166,9 +166,9 @@ const CreateTransaction = () => {
       <HeaderBar
         icon={coinIcon}
         headerTitle="Wallet Name"
-        title="เงินใช้รายเดือน"
+        title={wallet.walletName}
         headerDescription="Balance"
-        description={10000}
+        description={wallet.balance}
       />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

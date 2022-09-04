@@ -4,6 +4,7 @@ export interface TypeHeaderBarHome {
   imageProfile?: string;
   name: string;
   description: string;
+  onPress: () => void;
 }
 export interface TypeHeaderBar {
   icon: ImageSourcePropType;

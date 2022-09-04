@@ -18,11 +18,12 @@ const HeaderBarHome: React.FC<TypeHeaderBarHome> = ({
   imageProfile,
   name,
   description,
+  onPress,
 }) => {
   return (
     <View style={styles.containerHeaderBar}>
       <View style={styles.positionIcon}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onPress}>
           <Image source={menuIcon} style={styles.icon} />
         </TouchableOpacity>
       </View>

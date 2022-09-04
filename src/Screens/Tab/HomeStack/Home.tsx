@@ -5,7 +5,7 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 
-import {getUserAction, getWalletAction} from '@Redux/Slices';
+import {getUserAction, getWalletAction, logoutAction} from '@Redux/Slices';
 import {HeaderBarHome, Wallet, MenuCard} from '@Components';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {COLORS, KEY_LOCAL_STORAGE} from '@Constants';
@@ -110,13 +110,19 @@ const Home = () => {
       await getUser(token);
       const responseWallet: WalletResponseType = await getWalletUser(token);
       await getTransaction(token, responseWallet.id);
+    } else {
+      navigation.navigate('AuthStack');
     }
+  };
+
+  const onPressLogout = async () => {
+    await dispatch(logoutAction());
   };
 
   useFocusEffect(
     useCallback(() => {
       getInfo();
-    }, []),
+    }, [user.token]),
   );
 
   return (
@@ -126,6 +132,7 @@ const Home = () => {
         name={user.username}
         description="วันนี้กินให้น้อยๆ"
         imageProfile="https://reactnative.dev/img/tiny_logo.png"
+        onPress={onPressLogout}
       />
 
       <View style={styles.containerContent}>

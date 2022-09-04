@@ -1,5 +1,10 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {loginAction, getUserAction, signUpAction} from './userAction';
+import {
+  loginAction,
+  getUserAction,
+  signUpAction,
+  logoutAction,
+} from './userAction';
 import {STATUS} from '@Constants';
 import {
   LoginResponseDataType,
@@ -90,6 +95,11 @@ const userSlice = createSlice({
       state.status = STATUS.FAILED;
       state.messageError = action.payload.message;
       state.isLoading = false;
+    },
+
+    //logout action
+    [logoutAction.fulfilled.type]: state => {
+      state.user = {id: '', email: '', username: '', token: ''};
     },
   },
 });

@@ -58,3 +58,14 @@ export const getUserAction = createAsyncThunk<
     return rejectWithValue(error.response.data);
   }
 });
+
+export const logoutAction = createAsyncThunk(
+  'user/logout',
+  async (_, {rejectWithValue}) => {
+    try {
+      await storeData(KEY_LOCAL_STORAGE.TOKEN, '');
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
